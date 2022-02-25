@@ -8,10 +8,10 @@ kaboom({
     clearColor: [0, 0, 0, 1],
 })
     //movement variables for player
-    const MOVE_SPEED = 200;
-    const JUMP_FORCE = 500;
+    const MoveSpeed = 500;
+    const JumpHieght = 500;
 
-    let CURRENT_JUMP_FORCE = JUMP_FORCE;
+    let CurrentJumpHieght = JumpHieght;
     let Jumping = true;
     const FALL_DEATH = 400;
 
@@ -37,6 +37,7 @@ loadSprite('player', 'Sprites/Player.png',{
 {animSpeed: 2})
 
 loadSprite('door', 'Sprites/door.png')
+loadSprite('SecretDoor', 'Sprites/bookShelf.png')
 
 
 scene("game", ({ level, score }) =>{
@@ -47,9 +48,9 @@ scene("game", ({ level, score }) =>{
             '                                ',
             '                           ',
             '                       ',
-            '                        *   ',
-            '               @          =',
-            '                           =   ',
+            '     *                   *   ',
+            '                         ',
+            '                              ',
             '=====================================',
         ],
         [
@@ -57,7 +58,71 @@ scene("game", ({ level, score }) =>{
             '                 ',
             '                 ',
             '                 ',
-            '*                *',
+            '/       /  =       /',
+            '                 ',
+            '                 ',
+            '=========================',
+        ],
+
+        [
+            '                 ',
+            '                 ',
+            '                 ',
+            '         ==        ',
+            '-         -       -',
+            '                 ',
+            '                 ',
+            '====================',
+        ],
+
+        [
+            '                 ',
+            '        ===         ',
+            '                 ',
+            '                 ',
+            '+        +            +',
+            '                s    ',
+            '                 ',
+            '========================',
+        ],
+        [
+            '        @@@@      ',
+            '        ====         ',
+            '                 ',
+            '                 ',
+            'd       d        d',
+            '                 ',
+            '                 ',
+            '==================',
+        ],
+        [
+            '                 ',
+            '        =====         ',
+            '                 ',
+            '                 ',
+            'd       d        d',
+            '                 ',
+            '                 ',
+            '==================',
+        ],
+
+        [
+            '                 ',
+            '=================',
+            '        @@@      ',
+            '                 ',
+            'd               d',
+            '                 ',
+            '                 ',
+            '==================',
+        ],
+
+        [
+            '                 ',
+            '        =====         ',
+            '                 ',
+            '        @@@@@@@@@@@         ',
+            'd               d',
             '                 ',
             '                 ',
             '==================',
@@ -71,13 +136,17 @@ scene("game", ({ level, score }) =>{
         height: 20,
         '=': [ sprite('tile',{frame: 65}),solid(), scale(0.1)],
 
-        '*': [sprite('door'),scale(0.3), 'door'],
-        '@': [sprite('guard'), solid(), scale(0.9), 'dangerous']
+        '*': [sprite('door'),scale(0.3), 'door1'],
+        '-': [sprite('door'),scale(0.3), 'door3'],
+        '+': [sprite('door'),scale(0.3), 'door4'],
+        '@': [sprite('guard'), solid(), scale(0.9), 'dangerous'],
+        '/': [sprite('door'),scale(0.3), 'door2'],
+        's': [sprite('SecretDoor'),scale(0.3), 'doorS'],
+        'd': [sprite('door'),scale(0.3), 'doorS'],
     }
 
     const gameLevel = addLevel(maps[level],levelConfig)
 
-    //adding a score label/ui element
     const scoreLabel = add([
         
         text(score),
@@ -92,19 +161,63 @@ scene("game", ({ level, score }) =>{
 
    
 
-    //player
     const player = add([ 
         sprite('player'), solid(), 
-        pos(0,150), 
+        pos(10,150), 
         body(),
  
         origin('bot')
+    ])
+
+    
+    const enemy = add([
+        sprite('guard'), solid(),
+        pos(200, 108),
+        'dangerous', 
+        
     ])
 
 
    
 
 
+    player.collides('dangerous', (d) => {
+    
+     go('cuaght', {score: scoreLabel.value})
+    
+    })
+
+    
+
+    let ENEMY_SPEED = 30;
+
+
+    wait(3, () => {
+        ENEMY_SPEED = -30;
+        wait(3, () => {
+            ENEMY_SPEED = 30;
+            wait(3, () => {
+                ENEMY_SPEED = -30;
+                
+            })
+            
+        })
+    })
+
+    action('dangerous', (d) =>{
+        d.move(-ENEMY_SPEED,0)
+    });
+
+
+
+
+
+    player.action(() =>{
+        camPos(player.pos) 
+        if(player.pos.y >= FALL_DEATH){
+            go('death', {score: scoreLabel.value})
+        }
+    })
 
     player.collides('coin', (c) =>{
         destroy(c)
@@ -112,45 +225,68 @@ scene("game", ({ level, score }) =>{
         scoreLabel.text = scoreLabel.value
     })
 
-    //adding in enemy interaction
-    player.collides('dangerous', (d) => {
-    
-     go('cuaght', {score: scoreLabel.value})
-    
-    })
 
-    const ENEMY_SPEED = 0
+    function RMG(max){
+        return Math.floor(Math.random() * max);
+    }
 
-    
 
-    action('dangerous', (d) =>{
-        d.move(-ENEMY_SPEED,0)
-    })
-
-    player.action(() =>{
-        camPos(player.pos) //camera postition
-        if(player.pos.y >= FALL_DEATH){
-            go('death', {score: scoreLabel.value})
-        }
-    })
-
-    player.collides('door', () =>{
+    //doors
+    player.collides('door1', () =>{
         keyPress('up', () =>{
             go('game', {
-                level: (level + 1) % maps.length,
-                score: scoreLabel.value
+                level: (level + RMG(4)) % maps.length,
+                // score: scoreLabel.value
             })
         })
     })
 
-    //adding keyboard functions
+    player.collides('door2', () =>{
+        keyPress('up', () =>{
+            go('game', {
+                level: (level + RMG(3)) % maps.length,
+                // score: scoreLabel.value
+            })
+        })
+    })
+
+    player.collides('door3', () =>{
+        keyPress('up', () =>{
+            go('game', {
+                level: (level + RMG(2)) % maps.length,
+                // score: scoreLabel.value
+            })
+        })
+    })
+
+    player.collides('door4', () =>{
+        keyPress('up', () =>{
+            go('game', {
+                level: (level - RMG(4)) % maps.length,
+                // score: scoreLabel.value
+            })
+        })
+    })
+
+
+    player.collides('doorS', () =>{
+        keyPress('up', () =>{
+            go('game', {
+                level: (level + 1) % maps.length,
+                // score: scoreLabel.value
+            })
+        })
+    })
+
+    //door
+
     keyDown('left', () => {
-        player.move(-MOVE_SPEED,0);
+        player.move(-MoveSpeed,0);
         
     })
 
     keyDown('right', () => {
-        player.move(MOVE_SPEED,0);
+        player.move(MoveSpeed,0);
     })
 
     player.action( () =>{
@@ -163,19 +299,18 @@ scene("game", ({ level, score }) =>{
     keyPress('space', () => {
         if(player.grounded()){
             isJumping = true;
-            player.jump(CURRENT_JUMP_FORCE); 
+            player.jump(CurrentJumpHieght); 
         }
     })
 
 })
 
-//making a game over screen
-scene('cuaght', ({ score }) =>{
-    add([text(' you got caught', score, 32), origin('center'), pos(width()/2, height()/2)])
+scene('cuaght', () =>{
+    add([text(' you got caught'), origin('center'), pos(width()/2, height()/2)])
 })
 
-scene('death', ({score}) =>{
-    add([text('YOU DIED', score, 32), origin('center'), color(255, 0, 0),pos(width()/2, height()/2)])
+scene('death', () =>{
+    add([text('YOU DIED'), origin('center'), color(255, 0, 0),pos(width()/2, height()/2)])
 })
 
 
