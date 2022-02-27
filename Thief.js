@@ -644,4 +644,4 @@ scene('END', ({score}) =>{
 
 
 
-start("game", { level: 9 , score: 0 })
+start("game", { level:0 , score: 0 })
