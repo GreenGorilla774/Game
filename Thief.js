@@ -16,7 +16,7 @@ kaboom({
 
 
 //sprites
-loadSprite('floor', 'Sprites/floor.png')
+loadSprite('floor', 'Sprites/floor.png') 
 loadSprite('under', 'Sprites/underGround.png')
 loadSprite('table', 'Sprites/table.png')
 loadSprite('cave', 'Sprites/blackCave.png')
