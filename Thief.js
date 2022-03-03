@@ -1,4 +1,6 @@
 
+//Added For Final = AFF
+
 
 kaboom({
     global: true,
@@ -9,7 +11,7 @@ kaboom({
 })
     
     const MoveSpeed = 200;
-    const JumpHieght = 309;
+    const JumpHieght = 310;
 
     let CurrentJumpHieght = JumpHieght;
  
@@ -26,7 +28,11 @@ loadSprite('cat', 'Sprites/sleepingCat.png')
 loadSprite('lamp', 'Sprites/lamp.png')
 loadSprite('guardL', 'Sprites/standL.png')
 loadSprite('guardR', 'Sprites/standR.png')
+
+
 loadSprite('player', 'Sprites/Player.png')
+
+
 loadSprite('reaper', 'Sprites/reaper.png')
 loadSprite('skeleton', 'Sprites/boneHead.png')
 loadSprite('door', 'Sprites/door.png')
@@ -625,21 +631,41 @@ scene("game", ({ level, score }) =>{
 //caught by guards
 scene('caught', ({score}) =>{
     add([text(' you got caught' + '\n\nGems stolen: ' + score), origin('center'),color(255, 0, 0), pos(width()/2, height()/2)])
+
+    //AFF: Relaods the game by pressing space when you get caught.
+    keyPress('space', () =>{
+        document.location.reload(true)
+    })
 })
 
 //death by traps
 scene('death', ({score}) =>{
     add([text('YOU DIED' + '\n\nGems stolen: ' + score), origin('center'), color(255, 0, 0),pos(width()/2, height()/2)])
+
+    //AFF: Relaods the game by pressing space when you die.
+    keyPress('space', () =>{
+        document.location.reload(true)
+    })
 })
 
 //death by enemies
 scene('deathE', ({score}) =>{
     add([text('YOU DIED' + '\n\nGems stolen: ' + score), origin('center'), color(255, 0, 0),pos(width()/2, height()/2)])
+
+    //AFF: Relaods the game by pressing space when you die.
+    keyPress('space', () =>{
+        document.location.reload(true)
+    })
 })
 
 //end 
 scene('END', ({score}) =>{
     add([text('THE END' + '\n\nGems stolen: ' + score + '\n\n\nThank you for playing.'), origin('center'),pos(width()/2, height()/2)])
+
+    //AFF: Relaods the game by pressing space when you finish.
+    keyPress('space', () =>{
+        document.location.reload(true)
+    })
 })
 
 
