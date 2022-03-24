@@ -36,6 +36,7 @@ loadSprite('tSign', 'Sprites/townSign.png')
 loadSprite('Town', 'Sprites/town.png')
 loadSprite('mSign', 'Sprites/mansionSign.png')
 loadSprite('Mansion', 'Sprites/mansion.png')
+
 loadSprite('Intro1', 'Sprites/intro1.png')
 loadSprite('Intro2', 'Sprites/intro2.png')
 loadSprite('Intro3', 'Sprites/intro3.png')
