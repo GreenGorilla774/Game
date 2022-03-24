@@ -1,8 +1,6 @@
 # Game
 Story: 
-You got a tip about a new job. An old jewler would be out of town for a few days. You see this as the perfect chance to attack. 
-
-Your objective is to steal as many gems as you can, then get out.
+You play as John, a retired theif, who is trying to steal enough money to buy the medicine for his sick family
 
 Controls:
 "<": move left
